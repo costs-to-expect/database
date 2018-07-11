@@ -1,0 +1,17 @@
+version: '3'
+services:
+    app:
+        build:
+            context: .
+            dockerfile: .docker/Dockerfile
+    mysql:
+        image: mysql:5.7
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: costs_to_expect
+            MYSQL_USER: costs_to_expect_user
+            MYSQL_PASSWORD: password_here
+            MYSQL_ROOT_PASSWORD: root_password_here
+        volumes:
+            - ./app/mysql/data:/var/lib/mysql
