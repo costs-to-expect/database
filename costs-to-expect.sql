@@ -23,6 +23,8 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -36,10 +38,12 @@ CREATE TABLE `items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `resource_id` tinyint(3) unsigned NOT NULL,
   `sub_category_id` tinyint(3) unsigned NOT NULL,
-  `effective_date` datetime NOT NULL,
+  `effective_date` date NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `percentage` tinyint(3) NOT NULL DEFAULT '100',
   `actualised_total` decimal(10,2) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `resource_id` (`resource_id`),
   KEY `sub_category_id` (`sub_category_id`),
@@ -58,6 +62,8 @@ CREATE TABLE `resource` (
   `resource_type_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `effective_date` date NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `resource_type_id` (`resource_type_id`),
   CONSTRAINT `resource_type_id` FOREIGN KEY (`resource_type_id`) REFERENCES `resource_type` (`id`)
@@ -73,6 +79,8 @@ CREATE TABLE `resource_type` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -86,6 +94,8 @@ CREATE TABLE `sub_category` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
