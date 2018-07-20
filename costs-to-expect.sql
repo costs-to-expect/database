@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -38,6 +39,7 @@ CREATE TABLE `items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `resource_id` tinyint(3) unsigned NOT NULL,
   `sub_category_id` tinyint(3) unsigned NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `effective_date` date NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `percentage` tinyint(3) NOT NULL DEFAULT '100',
@@ -61,6 +63,7 @@ CREATE TABLE `resource` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `resource_type_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `effective_date` date NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -78,7 +81,7 @@ DROP TABLE IF EXISTS `resource_type`;
 CREATE TABLE `resource_type` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -94,6 +97,7 @@ CREATE TABLE `sub_category` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
