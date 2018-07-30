@@ -21,56 +21,96 @@ USE `costs_to_expect`;
 DROP TABLE IF EXISTS `category`;
 
 CREATE TABLE `category` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `category_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `category` */
 
-/*Table structure for table `items` */
+/*Table structure for table `item` */
 
-DROP TABLE IF EXISTS `items`;
+DROP TABLE IF EXISTS `item`;
 
-CREATE TABLE `items` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `resource_id` tinyint(3) unsigned NOT NULL,
-  `sub_category_id` tinyint(3) unsigned NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+CREATE TABLE `item` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `resource_id` bigint(20) unsigned NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `effective_date` date NOT NULL,
   `total` decimal(10,2) NOT NULL,
-  `percentage` tinyint(3) NOT NULL DEFAULT '100',
+  `percentage` tinyint(3) unsigned NOT NULL DEFAULT '100',
   `actualised_total` decimal(10,2) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `resource_id` (`resource_id`),
-  KEY `sub_category_id` (`sub_category_id`),
-  CONSTRAINT `resource_id` FOREIGN KEY (`resource_id`) REFERENCES `resource` (`id`),
-  CONSTRAINT `sub_category_id` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `item_resource_id_foreign` (`resource_id`),
+  CONSTRAINT `item_resource_id_foreign` FOREIGN KEY (`resource_id`) REFERENCES `resource` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-/*Data for the table `items` */
+
+/*Data for the table `item_category` */
+
+/*Table structure for table `item_category` */
+
+DROP TABLE IF EXISTS `item`;
+
+CREATE TABLE `item_category` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` bigint(20) unsigned NOT NULL,
+  `category_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_category_item_id_foreign` (`item_id`),
+  KEY `item_category_category_id_foreign` (`category_id`),
+  CONSTRAINT `item_category_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  CONSTRAINT `item_category_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `item_category` */
+
+/*Data for the table `item_sub_category` */
+
+/*Table structure for table `item_sub_category` */
+
+DROP TABLE IF EXISTS `item`;
+
+CREATE TABLE `item_sub_category` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` bigint(20) unsigned NOT NULL,
+  `sub_category_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_sub_category_item_id_foreign` (`item_id`),
+  KEY `item_sub_category_sub_category_id_foreign` (`sub_category_id`),
+  CONSTRAINT `item_sub_category_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`),
+  CONSTRAINT `item_sub_category_sub_category_id_foreign` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_category` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `item_sub_category` */
 
 /*Table structure for table `resource` */
 
 DROP TABLE IF EXISTS `resource`;
 
 CREATE TABLE `resource` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `resource_type_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `resource_type_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `effective_date` date NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `resource_type_id` (`resource_type_id`),
-  CONSTRAINT `resource_type_id` FOREIGN KEY (`resource_type_id`) REFERENCES `resource_type` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `resource_resource_type_id_name_unique` (`resource_type_id`,`name`),
+  CONSTRAINT `resource_resource_type_id_foreign` FOREIGN KEY (`resource_type_id`) REFERENCES `resource_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 /*Data for the table `resource` */
 
@@ -79,13 +119,14 @@ CREATE TABLE `resource` (
 DROP TABLE IF EXISTS `resource_type`;
 
 CREATE TABLE `resource_type` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `resource_type_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `resource_type` */
 
@@ -94,16 +135,17 @@ CREATE TABLE `resource_type` (
 DROP TABLE IF EXISTS `sub_category`;
 
 CREATE TABLE `sub_category` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `category_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `category_id` (`category_id`),
-  CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `sub_category_category_id_name_unique` (`category_id`,`name`),
+  CONSTRAINT `sub_category_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 /*Data for the table `sub_category` */
 
