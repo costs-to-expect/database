@@ -65,7 +65,7 @@ CREATE TABLE `item_category` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `item_category_item_id_foreign` (`item_id`),
+  UNIQUE KEY `item_category_item_id_unique` (`item_id`),
   KEY `item_category_category_id_foreign` (`category_id`),
   CONSTRAINT `item_category_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
   CONSTRAINT `item_category_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`)
@@ -81,14 +81,14 @@ DROP TABLE IF EXISTS `item`;
 
 CREATE TABLE `item_sub_category` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `item_id` bigint(20) unsigned NOT NULL,
+  `item_category_id` bigint(20) unsigned NOT NULL,
   `sub_category_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `item_sub_category_item_id_foreign` (`item_id`),
+  KEY `item_sub_category_item_category_id_foreign` (`item_category_id`),
   KEY `item_sub_category_sub_category_id_foreign` (`sub_category_id`),
-  CONSTRAINT `item_sub_category_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`),
+  CONSTRAINT `item_sub_category_item_category_id_foreign` FOREIGN KEY (`item_category_id`) REFERENCES `item_category` (`id`),
   CONSTRAINT `item_sub_category_sub_category_id_foreign` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
