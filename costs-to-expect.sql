@@ -1,5 +1,5 @@
 /*
-SQLyog Ultimate v13.0.0 (64 bit)
+SQLyog Ultimate v13.1.1 (64 bit)
 MySQL - 5.7.21 : Database - costs_to_expect
 *********************************************************************
 */
@@ -30,8 +30,6 @@ CREATE TABLE `category` (
   UNIQUE KEY `category_name_unique` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-/*Data for the table `category` */
-
 /*Table structure for table `item` */
 
 DROP TABLE IF EXISTS `item`;
@@ -51,12 +49,9 @@ CREATE TABLE `item` (
   CONSTRAINT `item_resource_id_foreign` FOREIGN KEY (`resource_id`) REFERENCES `resource` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-/*Data for the table `item_category` */
-
 /*Table structure for table `item_category` */
 
-DROP TABLE IF EXISTS `item`;
+DROP TABLE IF EXISTS `item_category`;
 
 CREATE TABLE `item_category` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -71,13 +66,9 @@ CREATE TABLE `item_category` (
   CONSTRAINT `item_category_item_id_foreign` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-/*Data for the table `item_category` */
-
-/*Data for the table `item_sub_category` */
-
 /*Table structure for table `item_sub_category` */
 
-DROP TABLE IF EXISTS `item`;
+DROP TABLE IF EXISTS `item_sub_category`;
 
 CREATE TABLE `item_sub_category` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -92,7 +83,33 @@ CREATE TABLE `item_sub_category` (
   CONSTRAINT `item_sub_category_sub_category_id_foreign` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-/*Data for the table `item_sub_category` */
+/*Table structure for table `request_error_log` */
+
+DROP TABLE IF EXISTS `request_error_log`;
+
+CREATE TABLE `request_error_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `method` char(8) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expected_status_code` smallint(5) unsigned NOT NULL,
+  `returned_status_code` smallint(5) unsigned NOT NULL,
+  `request_uri` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Table structure for table `request_log` */
+
+DROP TABLE IF EXISTS `request_log`;
+
+CREATE TABLE `request_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `method` char(8) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `request` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Table structure for table `resource` */
 
@@ -111,9 +128,6 @@ CREATE TABLE `resource` (
   CONSTRAINT `resource_resource_type_id_foreign` FOREIGN KEY (`resource_type_id`) REFERENCES `resource_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-/*Data for the table `resource` */
-
 /*Table structure for table `resource_type` */
 
 DROP TABLE IF EXISTS `resource_type`;
@@ -127,8 +141,6 @@ CREATE TABLE `resource_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `resource_type_name_unique` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-/*Data for the table `resource_type` */
 
 /*Table structure for table `sub_category` */
 
@@ -145,9 +157,6 @@ CREATE TABLE `sub_category` (
   UNIQUE KEY `sub_category_category_id_name_unique` (`category_id`,`name`),
   CONSTRAINT `sub_category_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-/*Data for the table `sub_category` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
