@@ -2,6 +2,8 @@
 
 ## Database schema
 
-The database schema for the costs to expect API, docker setup for easy management, the 
-database will be included in the RESTFul API although the data will remain private outside of access via 
-the API.
+The repository contains the database schema for the Costs to Expect API as well as a simple Docker setup.
+
+The Costs to Expect API is public however the content obviously remains private other than what is accessible publically through the API.
+
+
